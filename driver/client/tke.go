@@ -242,54 +242,54 @@ func (t TKEClient) CreateCluster(spec tkev1.TKEClusterConfigSpec) (*string, erro
 		QGPUShareEnable:         &spec.ClusterAdvancedSettings.QGPUShareEnable,
 	}
 
-	var runInstancesForNodes []*tkeapi.RunInstancesForNode
-	var runInstancesParas []*string
-	runInstancesRequest := &cvmapi.RunInstancesRequest{
-		InstanceChargeType: &spec.RunInstancesForNode.InstanceChargeType,
-		Placement: &cvmapi.Placement{
-			Zone:      &spec.RunInstancesForNode.Zone,
-			ProjectId: &spec.RunInstancesForNode.ProjectId,
-		},
-		InstanceCount: &spec.RunInstancesForNode.InstanceCount,
-		InstanceType:  &spec.RunInstancesForNode.InstanceType,
-		ImageId:       &spec.RunInstancesForNode.ImageId,
-		SystemDisk:    utils.ParseToSystemDiskInstance(spec.RunInstancesForNode.SystemDisk),
-		VirtualPrivateCloud: &cvmapi.VirtualPrivateCloud{
-			VpcId:    &spec.RunInstancesForNode.VpcId,
-			SubnetId: &spec.RunInstancesForNode.SubnetId,
-		},
-		InternetAccessible: &cvmapi.InternetAccessible{
-			InternetChargeType:      &spec.RunInstancesForNode.InternetChargeType,
-			InternetMaxBandwidthOut: &spec.RunInstancesForNode.InternetMaxBandwidthOut,
-			PublicIpAssigned:        &spec.RunInstancesForNode.PublicIpAssigned,
-		},
-		InstanceName: &spec.RunInstancesForNode.InstanceName,
-		LoginSettings: &cvmapi.LoginSettings{
-			KeyIds: utils.ParseStrings(spec.RunInstancesForNode.KeyIds),
-		},
-		EnhancedService: &cvmapi.EnhancedService{
-			SecurityService: &cvmapi.RunSecurityServiceEnabled{
-				Enabled: &spec.RunInstancesForNode.SecurityService,
+	if spec.RunInstancesForNode != nil {
+		var runInstancesForNodes []*tkeapi.RunInstancesForNode
+		var runInstancesParas []*string
+		runInstancesRequest := &cvmapi.RunInstancesRequest{
+			InstanceChargeType: &spec.RunInstancesForNode.InstanceChargeType,
+			Placement: &cvmapi.Placement{
+				Zone:      &spec.RunInstancesForNode.Zone,
+				ProjectId: &spec.RunInstancesForNode.ProjectId,
 			},
-			MonitorService: &cvmapi.RunMonitorServiceEnabled{
-				Enabled: &spec.RunInstancesForNode.MonitorService,
+			InstanceCount: &spec.RunInstancesForNode.InstanceCount,
+			InstanceType:  &spec.RunInstancesForNode.InstanceType,
+			ImageId:       &spec.RunInstancesForNode.ImageId,
+			VirtualPrivateCloud: &cvmapi.VirtualPrivateCloud{
+				VpcId:    &spec.RunInstancesForNode.VpcId,
+				SubnetId: &spec.RunInstancesForNode.SubnetId,
 			},
-		},
-		UserData: &spec.RunInstancesForNode.UserData,
+			InternetAccessible: &cvmapi.InternetAccessible{
+				InternetChargeType:      &spec.RunInstancesForNode.InternetChargeType,
+				InternetMaxBandwidthOut: &spec.RunInstancesForNode.InternetMaxBandwidthOut,
+				PublicIpAssigned:        &spec.RunInstancesForNode.PublicIpAssigned,
+			},
+			InstanceName: &spec.RunInstancesForNode.InstanceName,
+			LoginSettings: &cvmapi.LoginSettings{
+				KeyIds: utils.ParseStrings(spec.RunInstancesForNode.KeyIds),
+			},
+			EnhancedService: &cvmapi.EnhancedService{
+				SecurityService: &cvmapi.RunSecurityServiceEnabled{
+					Enabled: &spec.RunInstancesForNode.SecurityService,
+				},
+				MonitorService: &cvmapi.RunMonitorServiceEnabled{
+					Enabled: &spec.RunInstancesForNode.MonitorService,
+				},
+			},
+			UserData: &spec.RunInstancesForNode.UserData,
+		}
+
+		runInstancesPara, err := json.Marshal(runInstancesRequest)
+		if err != nil {
+			return nil, err
+		}
+		runInstancesParas = append(runInstancesParas, utils.ValueString(string(runInstancesPara)))
+
+		runInstancesForNodes = append(runInstancesForNodes, &tkeapi.RunInstancesForNode{
+			NodeRole:         &spec.RunInstancesForNode.NodeRole,
+			RunInstancesPara: runInstancesParas,
+		})
+		request.RunInstancesForNode = runInstancesForNodes
 	}
-
-	runInstancesPara, err := json.Marshal(runInstancesRequest)
-	if err != nil {
-		return nil, err
-	}
-	runInstancesParas = append(runInstancesParas, utils.ValueString(string(runInstancesPara)))
-
-	runInstancesForNodes = append(runInstancesForNodes, &tkeapi.RunInstancesForNode{
-		NodeRole:         &spec.RunInstancesForNode.NodeRole,
-		RunInstancesPara: runInstancesParas,
-	})
-	request.RunInstancesForNode = runInstancesForNodes
-
 	var specExtensionAddon []*tkeapi.ExtensionAddon
 	for _, extensionAddon := range spec.ExtensionAddon {
 		specExtensionAddon = append(specExtensionAddon, &tkeapi.ExtensionAddon{
