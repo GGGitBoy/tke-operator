@@ -98,8 +98,8 @@ func GetCredential(secretsCache wranglerv1.SecretCache, tkeCredentialSecret stri
 		return nil, err
 	}
 
-	accessKeyBytes := secret.Data["tkeCredentialSecret-accessKeyID"]
-	secretKeyBytes := secret.Data["tkeCredentialSecret-accessKeySecret"]
+	accessKeyBytes := secret.Data["tkecredentialConfig-accessKeyID"]
+	secretKeyBytes := secret.Data["tkecredentialConfig-accessKeySecret"]
 	if accessKeyBytes == nil || secretKeyBytes == nil {
 		return nil, fmt.Errorf("invalid tke credential")
 	}
