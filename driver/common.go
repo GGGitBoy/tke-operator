@@ -48,6 +48,10 @@ type Driver struct {
 }
 
 func GetDriver(secretsCache wranglerv1.SecretCache, tkeCredentialSecret, region string) (*Driver, error) {
+	if region == "" {
+		region = "ap-guangzhou"
+	}
+
 	credential, err := GetCredential(secretsCache, tkeCredentialSecret)
 	if err != nil {
 		return nil, err
