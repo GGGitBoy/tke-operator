@@ -539,3 +539,19 @@ func (t TKEClient) CreateClusterEndpoints(spec tkev1.TKEClusterConfigSpec) error
 
 	return nil
 }
+
+func (t TKEClient) GetClusterLevelAttribute() (*tkeapi.DescribeClusterLevelAttributeResponse, error) {
+	logrus.Infof("client tke action: GetClusterLevelAttribute")
+	request := tkeapi.NewDescribeClusterLevelAttributeRequest()
+
+	response, err := t.client.DescribeClusterLevelAttribute(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.Response == nil {
+		return nil, fmt.Errorf("error while getting response")
+	}
+
+	return response, nil
+}

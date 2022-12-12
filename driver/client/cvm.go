@@ -94,3 +94,19 @@ func (c CVMClient) GetZones() (*cvmapi.DescribeZonesResponse, error) {
 
 	return response, nil
 }
+
+func (c CVMClient) GetZoneInstanceConfigInfos() (*cvmapi.DescribeZoneInstanceConfigInfosResponse, error) {
+	logrus.Infof("client cvm action: GetZoneInstanceConfigInfos")
+	request := cvmapi.NewDescribeZoneInstanceConfigInfosRequest()
+
+	response, err := c.client.DescribeZoneInstanceConfigInfos(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.Response == nil {
+		return nil, fmt.Errorf("error while getting response")
+	}
+
+	return response, nil
+}
