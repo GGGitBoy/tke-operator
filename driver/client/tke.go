@@ -48,6 +48,21 @@ func (t TKEClient) GetCluster(clusterId string) (*tkeapi.Cluster, error) {
 	return response.Response.Clusters[0], nil
 }
 
+func (t TKEClient) GetClusters() (*tkeapi.DescribeClustersResponse, error) {
+	logrus.Infof("client tke action: GetClusters")
+	request := tkeapi.NewDescribeClustersRequest()
+	response, err := t.client.DescribeClusters(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if response.Response == nil {
+		return nil, fmt.Errorf("error while getting response")
+	}
+
+	return response, nil
+}
+
 func (t TKEClient) GetClusterStatus(clusterId *string) (*tkeapi.ClusterStatus, error) {
 	logrus.Infof("client tke action: GetClusterStatus")
 	request := tkeapi.NewDescribeClusterStatusRequest()
