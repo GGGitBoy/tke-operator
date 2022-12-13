@@ -8,6 +8,8 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 )
 
+var inquiryType = "INQUIRY_CVM_CONFIG"
+
 type CBSClient struct {
 	client *cbsapi.Client
 }
@@ -26,9 +28,7 @@ func GetCBSClient(credential *tccommon.Credential, region string) (*CBSClient, e
 func (c CBSClient) GetDiskConfigQuota() (*cbsapi.DescribeDiskConfigQuotaResponse, error) {
 	logrus.Infof("client cbs action: GetDiskConfigQuota")
 	request := cbsapi.NewDescribeDiskConfigQuotaRequest()
-	request.Zones = nil
-	request.InstanceFamilies = nil
-	request.InquiryType = nil
+	request.InquiryType = &inquiryType
 
 	response, err := c.client.DescribeDiskConfigQuota(request)
 	if err != nil {
