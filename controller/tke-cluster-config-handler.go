@@ -465,9 +465,9 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 		return h.enqueueUpdate(config)
 	}
 
-	if config.Spec.ClusterEndpoint.Enable {
+	if !config.Spec.Imported {
 		logrus.Infof("cluster endpoint enable")
-		endpointStatus, err := driver.TKEClient.GetClusterEndpointStatus(config.Spec.ClusterId)
+		endpointStatus, err := driver.TKEClient.GetClusterEndpointStatus(config.Spec.ClusterId, config.Spec.ClusterEndpoint.Enable)
 		if err != nil {
 			return config, err
 		}
@@ -485,7 +485,7 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 
 			for _, instance := range instances {
 				if *instance.InstanceState == tcdriver.InstanceStatusRunning {
-					if err = driver.TKEClient.CreateClusterEndpoints(config.Spec); err != nil {
+					if err = driver.TKEClient.CreateClusterEndpoints(config.Spec, config.Spec.ClusterEndpoint.Enable); err != nil {
 						return config, err
 					}
 					break

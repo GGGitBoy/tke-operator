@@ -520,11 +520,11 @@ func (t TKEClient) GetClusterEndpoints(clusterId string) (*tkeapi.DescribeCluste
 	return response, nil
 }
 
-func (t TKEClient) GetClusterEndpointStatus(clusterId string) (*string, error) {
+func (t TKEClient) GetClusterEndpointStatus(clusterId string, extranet bool) (*string, error) {
 	logrus.Infof("client tke action: GetClusterEndpointStatus")
 	request := tkeapi.NewDescribeClusterEndpointStatusRequest()
 	request.ClusterId = &clusterId
-	request.IsExtranet = tccommon.BoolPtr(true)
+	request.IsExtranet = tccommon.BoolPtr(extranet)
 
 	response, err := t.client.DescribeClusterEndpointStatus(request)
 	if err != nil {
@@ -538,11 +538,11 @@ func (t TKEClient) GetClusterEndpointStatus(clusterId string) (*string, error) {
 	return response.Response.Status, nil
 }
 
-func (t TKEClient) CreateClusterEndpoints(spec tkev1.TKEClusterConfigSpec) error {
+func (t TKEClient) CreateClusterEndpoints(spec tkev1.TKEClusterConfigSpec, extranet bool) error {
 	logrus.Infof("client tke action: CreateClusterEndpoints")
 	request := tkeapi.NewCreateClusterEndpointRequest()
 	request.ClusterId = &spec.ClusterId
-	request.IsExtranet = tccommon.BoolPtr(true)
+	request.IsExtranet = tccommon.BoolPtr(extranet)
 	request.SubnetId = &spec.ClusterEndpoint.SubnetId
 	request.Domain = &spec.ClusterEndpoint.Domain
 	request.SecurityGroup = &spec.ClusterEndpoint.SecurityGroup
