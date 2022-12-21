@@ -362,7 +362,7 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 	}
 
 	var updatingNodePools bool
-	var deleteNodePoolIds []*string
+	var deleteNodePoolIds []string
 	configNodePool := make(map[string]tkev1.NodePoolDetail)
 
 	var updateNodePoolInstanceTypes, updateNodePoolDesiredCapacity, updateNodePool []tkev1.NodePoolDetail
@@ -415,15 +415,15 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 			}
 		} else {
 			logrus.Infof("NodePool [%s] will be delete", upstreamNp.NodePoolId)
-			deleteNodePoolIds = append(deleteNodePoolIds, &upstreamNp.NodePoolId)
+			deleteNodePoolIds = append(deleteNodePoolIds, upstreamNp.NodePoolId)
 		}
 	}
 
 	if len(deleteNodePoolIds) > 0 {
 		for _, sss := range deleteNodePoolIds {
-			fmt.Println("jiandao delete id  " + *sss)
+			fmt.Println("jiandao delete id  " + sss)
 		}
-		if err := driver.TKEClient.DeleteNodePool(config.Spec.ClusterId, deleteNodePoolIds); err != nil {
+		if err := driver.TKEClient.DeleteNodePool(config.Spec.ClusterId, utils.ParseStrings(deleteNodePoolIds)); err != nil {
 			return config, err
 		}
 		updatingNodePools = true
