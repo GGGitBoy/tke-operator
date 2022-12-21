@@ -393,6 +393,7 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 		fmt.Println("jiandao === upstreamNp  Name" + upstreamNp.NodePoolId)
 		fmt.Println("jiandao === upstreamNp  NodePoolId" + upstreamNp.NodePoolId)
 		if configNp, ok := configNodePool[upstreamNp.NodePoolId]; ok {
+			fmt.Println("jiandao ok " + upstreamNp.NodePoolId)
 			if configNp.LaunchConfigurePara.InstanceType != upstreamNp.LaunchConfigurePara.InstanceType {
 				updateNodePoolInstanceTypes = append(updateNodePoolInstanceTypes, configNp)
 			}
@@ -413,11 +414,15 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 				updateNodePool = append(updateNodePool, configNp)
 			}
 		} else {
+			logrus.Infof("NodePool [%s] will be delete", upstreamNp.NodePoolId)
 			deleteNodePoolIds = append(deleteNodePoolIds, &upstreamNp.NodePoolId)
 		}
 	}
 
 	if len(deleteNodePoolIds) > 0 {
+		for _, sss := range deleteNodePoolIds {
+			fmt.Println("jiandao delete id  " + *sss)
+		}
 		if err := driver.TKEClient.DeleteNodePool(config.Spec.ClusterId, deleteNodePoolIds); err != nil {
 			return config, err
 		}
