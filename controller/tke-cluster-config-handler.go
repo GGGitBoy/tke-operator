@@ -363,17 +363,14 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 
 	var updatingNodePools bool
 	var deleteNodePoolIds []*string
-	upstreamNodePool := make(map[string]tkev1.NodePoolDetail)
 	configNodePool := make(map[string]tkev1.NodePoolDetail)
 
 	var updateNodePoolInstanceTypes, updateNodePoolDesiredCapacity, updateNodePool []tkev1.NodePoolDetail
 
-	for _, np := range upstreamSpec.NodePoolList {
-		upstreamNodePool[np.NodePoolId] = np
-	}
-
 	var updatingForNodePoolId bool
 	for index, np := range config.Spec.NodePoolList {
+		fmt.Println("jiandao === Name" + np.Name)
+		fmt.Println("jiandao === NodePoolId" + np.NodePoolId)
 		if np.NodePoolId == "" {
 			responseNodePoolId, err := driver.TKEClient.CreateClusterNodePool(config.Spec.ClusterId, np)
 			if err != nil {
@@ -393,6 +390,8 @@ func (h *Handler) updateUpstreamClusterState(driver *tcdriver.Driver, config *tk
 	}
 
 	for _, upstreamNp := range upstreamSpec.NodePoolList {
+		fmt.Println("jiandao === upstreamNp  Name" + upstreamNp.NodePoolId)
+		fmt.Println("jiandao === upstreamNp  NodePoolId" + upstreamNp.NodePoolId)
 		if configNp, ok := configNodePool[upstreamNp.NodePoolId]; ok {
 			if configNp.LaunchConfigurePara.InstanceType != upstreamNp.LaunchConfigurePara.InstanceType {
 				updateNodePoolInstanceTypes = append(updateNodePoolInstanceTypes, configNp)
