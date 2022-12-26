@@ -337,6 +337,20 @@ func (h *Handler) checkAndUpdate(config *tkev1.TKEClusterConfig) (*tkev1.TKEClus
 		return config, err
 	}
 
+	//if config.Spec.Imported {
+	//	configUpdate := config.DeepCopy()
+	//	configUpdate.Spec = *upstreamSpec
+	//	configUpdate.Spec.Imported = config.Spec.Imported
+	//	configUpdate.Spec.ClusterId = config.Spec.ClusterId
+	//	configUpdate.Spec.Region = config.Spec.Region
+	//	configUpdate.Spec.TKECredentialSecret = config.Spec.TKECredentialSecret
+	//	updateConfig, err := h.tkeCC.Update(configUpdate)
+	//	if err != nil {
+	//		return config, err
+	//	}
+	//	config = updateConfig.DeepCopy()
+	//}
+
 	return h.updateUpstreamClusterState(driver, config, upstreamSpec)
 }
 
