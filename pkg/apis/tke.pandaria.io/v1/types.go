@@ -37,13 +37,13 @@ type TKEClusterConfigSpec struct {
 	Imported                bool                     `json:"imported"`
 	Region                  string                   `json:"region,omitempty"`
 	ClusterId               string                   `json:"clusterId,omitempty"`
-	ClusterEndpoint         *ClusterEndpoint         `json:"clusterEndpoint,omitempty"`
-	ClusterBasicSettings    *ClusterBasicSettings    `json:"clusterBasicSettings,omitempty"`
-	ClusterCIDRSettings     *ClusterCIDRSettings     `json:"clusterCIDRSettings,omitempty"`
-	ClusterAdvancedSettings *ClusterAdvancedSettings `json:"clusterAdvancedSettings,omitempty"`
-	ExtensionAddon          []ExtensionAddon         `json:"extensionAddon,omitempty"`
-	RunInstancesForNode     *RunInstancesForNode     `json:"runInstancesForNode,omitempty"`
-	NodePoolList            []NodePoolDetail         `json:"nodePoolList,omitempty"`
+	ClusterEndpoint         *ClusterEndpoint         `json:"clusterEndpoint"`
+	ClusterBasicSettings    *ClusterBasicSettings    `json:"clusterBasicSettings"`
+	ClusterCIDRSettings     *ClusterCIDRSettings     `json:"clusterCIDRSettings"`
+	ClusterAdvancedSettings *ClusterAdvancedSettings `json:"clusterAdvancedSettings"`
+	ExtensionAddon          []ExtensionAddon         `json:"extensionAddon"`
+	RunInstancesForNode     *RunInstancesForNode     `json:"runInstancesForNode"`
+	NodePoolList            []NodePoolDetail         `json:"nodePoolList"`
 }
 
 type ExtensionAddon struct {
