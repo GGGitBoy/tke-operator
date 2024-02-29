@@ -21,7 +21,8 @@ package v1
 import (
 	v1 "github.com/cnrancher/tke-operator/pkg/apis/tke.pandaria.io/v1"
 	"github.com/rancher/lasso/pkg/controller"
-	"github.com/rancher/wrangler/pkg/schemes"
+	"github.com/rancher/wrangler/v2/pkg/generic"
+	"github.com/rancher/wrangler/v2/pkg/schemes"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
@@ -43,6 +44,6 @@ type version struct {
 	controllerFactory controller.SharedControllerFactory
 }
 
-func (c *version) TKEClusterConfig() TKEClusterConfigController {
-	return NewTKEClusterConfigController(schema.GroupVersionKind{Group: "tke.pandaria.io", Version: "v1", Kind: "TKEClusterConfig"}, "tkeclusterconfigs", true, c.controllerFactory)
+func (v *version) TKEClusterConfig() TKEClusterConfigController {
+	return generic.NewController[*v1.TKEClusterConfig, *v1.TKEClusterConfigList](schema.GroupVersionKind{Group: "tke.pandaria.io", Version: "v1", Kind: "TKEClusterConfig"}, "tkeclusterconfigs", true, v.controllerFactory)
 }

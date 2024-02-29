@@ -6,11 +6,11 @@ import (
 
 	v12 "github.com/cnrancher/tke-operator/pkg/apis/tke.pandaria.io/v1"
 	_ "github.com/rancher/wrangler-api/pkg/generated/controllers/apiextensions.k8s.io"
-	controllergen "github.com/rancher/wrangler/pkg/controller-gen"
-	"github.com/rancher/wrangler/pkg/controller-gen/args"
-	"github.com/rancher/wrangler/pkg/crd"
-	"github.com/rancher/wrangler/pkg/yaml"
-	v1 "k8s.io/api/core/v1"
+	controllergen "github.com/rancher/wrangler/v2/pkg/controller-gen"
+	"github.com/rancher/wrangler/v2/pkg/controller-gen/args"
+	"github.com/rancher/wrangler/v2/pkg/crd"
+	"github.com/rancher/wrangler/v2/pkg/yaml"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
@@ -28,18 +28,12 @@ func main() {
 				},
 				GenerateTypes: true,
 			},
-			// Optionally you can use wrangler-api project which
-			// has a lot of common kubernetes APIs already generated.
-			// In this controller we will use wrangler-api for apps api group
-			"": {
+			corev1.GroupName: {
 				Types: []interface{}{
-					v1.Pod{},
-					v1.Node{},
-					v1.Secret{},
+					corev1.Pod{},
+					corev1.Node{},
+					corev1.Secret{},
 				},
-				InformersPackage: "k8s.io/client-go/informers",
-				ClientSetPackage: "k8s.io/client-go/kubernetes",
-				ListersPackage:   "k8s.io/client-go/listers",
 			},
 		},
 	})

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/cnrancher/tke-operator/driver/client"
 	"github.com/cnrancher/tke-operator/utils"
-	wranglerv1 "github.com/rancher/wrangler/pkg/generated/controllers/core/v1"
+	wranglerv1 "github.com/rancher/wrangler/v2/pkg/generated/controllers/core/v1"
 	tccommon "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 )
 
